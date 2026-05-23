@@ -44,7 +44,7 @@ return ResponseEntity.ok(userDto);
 
 }
 
-    // delete delete user
+    // delete user
 @DeleteMapping("/{userId}")    
 public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId){
 
@@ -52,14 +52,14 @@ public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId){
    return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully", true), org.springframework.http.HttpStatus.OK);
 
 }
-    //Get get user by id
+    //Get user by id
         @GetMapping("/{userId}")
         public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
         return ResponseEntity.ok(this.userService.getUserById(userId));
 
      }
 
-  // get get all users
+  //get all users
   @GetMapping("/")
   public ResponseEntity<List<UserDto>> getAllUsers(){
     return ResponseEntity.ok(this.userService.getAllUsers());

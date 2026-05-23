@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import blogapp.com.payloads.ApiResponse;
 import blogapp.com.payloads.CategoryDto;
 import blogapp.com.services.Impl.CategoryService;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class CategoryController {
 
     // create
     @PostMapping("/")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto)
+    public ResponseEntity<CategoryDto> createCategory(@Valid@RequestBody CategoryDto categoryDto)
     {
         CategoryDto createdCategory = this.categoryService.createCategory(categoryDto);
         return new ResponseEntity<CategoryDto>(createdCategory,HttpStatus.CREATED);
@@ -37,7 +38,7 @@ public class CategoryController {
     // update
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,@PathVariable Integer categoryId)
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto,@PathVariable Integer categoryId)
     {
         CategoryDto updatedCategory = this.categoryService.updateCategory(categoryDto,categoryId);
         return new ResponseEntity<CategoryDto>(updatedCategory,HttpStatus.OK);
