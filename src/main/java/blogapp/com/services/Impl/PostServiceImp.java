@@ -27,7 +27,7 @@ private UserRepo userRepo;
 private CategoryRepo categoryRepo;
 
     @Override
-    public Post createPost(PostDto postDto,Integer userId, Integer categoryId) {
+    public PostDto createPost(PostDto postDto,Integer userId, Integer categoryId) {
         User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","id",userId));
         Category category=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","id",categoryId));
 
@@ -37,10 +37,7 @@ private CategoryRepo categoryRepo;
         post.setCategory(category);
         post.setUser(user);
         Post newPost=this.postRepo.save(post);
-        return this.modelMapper.map(newPost, Post.class);
-        
-         
-
+        return this.modelMapper.map(newPost, PostDto.class);
         
 
     }
@@ -95,7 +92,8 @@ private CategoryRepo categoryRepo;
         throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
     }
 
-
 }
 
   
+
+
