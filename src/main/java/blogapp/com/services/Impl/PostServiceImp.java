@@ -75,15 +75,23 @@ private CategoryRepo categoryRepo;
     }
 
     @Override
-    public List<Post> getPostsByCategory(Integer categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostsByCategory'");
+    public List getPostsByCategory(Integer categoryId) {
+    
+    Category cat=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","id",categoryId));
+    List<Post> posts=this.postRepo.findByCategory(cat);
+   List<PostDto> postDtos= posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
+return postDtos;
+
     }
 
+
     @Override
-    public List<Post> getPostsByUser(Integer userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostsByUser'");
+    public List getPostsByUser(Integer userId) {
+        User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","id",userId));
+        List<Post> posts=this.postRepo.findByUser(user);
+       List<PostDto> postDtos= posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
+    return postDtos;
+
     }
 
     @Override
