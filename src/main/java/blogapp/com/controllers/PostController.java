@@ -3,6 +3,7 @@ package blogapp.com.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,22 +24,34 @@ public class PostController {
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,@PathVariable Integer userId,@PathVariable Integer categoryId) {
         PostDto createdPost = postService.createPost(postDto, userId, categoryId);
         return new ResponseEntity<PostDto>(createdPost, org.springframework.http.HttpStatus.CREATED);
-    }
-    
 
-// get by user
+    }
+
+
+
+   
+    // get by category
 @GetMapping("/user/{userId}/posts")
 public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId) {
-    List<PostDto> posts = (List<PostDto>) this.getPostsByUser(userId);
-    return new ResponseEntity<List<PostDto>>(posts, org.springframework.http.HttpStatus.OK);
+
+    List<PostDto> posts = this.postService.getPostsByUser(userId);
+
+    return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
 }
+
+
+
+ 
 
 // get by category
 @GetMapping("/category/{categoryId}/posts")
 public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId) {
-    List<PostDto> posts = (List<PostDto>) this.getPostsByCategory(categoryId);
-    return new ResponseEntity<List<PostDto>>(posts, org.springframework.http.HttpStatus.OK);
+
+    List<PostDto> posts = this.postService.getPostsByCategory(categoryId);
+
+    return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
 }
 
 
 }
+

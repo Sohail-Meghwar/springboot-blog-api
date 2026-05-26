@@ -75,7 +75,7 @@ private CategoryRepo categoryRepo;
     }
 
     @Override
-    public List getPostsByCategory(Integer categoryId) {
+    public List<PostDto> getPostsByCategory(Integer categoryId) {
     
     Category cat=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","id",categoryId));
     List<Post> posts=this.postRepo.findByCategory(cat);
@@ -86,7 +86,7 @@ return postDtos;
 
 
     @Override
-    public List getPostsByUser(Integer userId) {
+    public List<PostDto> getPostsByUser(Integer userId) {
         User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","id",userId));
         List<Post> posts=this.postRepo.findByUser(user);
        List<PostDto> postDtos= posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
