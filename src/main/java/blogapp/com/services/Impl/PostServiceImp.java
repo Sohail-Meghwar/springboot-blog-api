@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import blogapp.com.entities.Category;
@@ -65,15 +66,20 @@ private CategoryRepo categoryRepo;
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPosts'");
+    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+    
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+        List<Post> posts=this.postRepo.findAll(pageable).getContent();
+        List<PostDto> postDtos= posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
+        return postDtos;
+
     }
+    
 
     @Override
-    public Post getPostById(Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostById'");
+    public PostDto getPostById(Integer postId) {
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+        return this.modelMapper.map(post, PostDto.class);
     }
 
     @Override
@@ -97,11 +103,10 @@ return postDtos;
     }
 
     @Override
-    public List<Post> searchPosts(String keyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
+    public List<PostDto> searchPosts(String keyword) {
+        List<Post> posts=this.postRepo.findByTitleContaining(keyword);
+        return posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
     }
-
 }
 
   

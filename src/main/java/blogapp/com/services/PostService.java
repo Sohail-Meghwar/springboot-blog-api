@@ -1,6 +1,5 @@
 package blogapp.com.services;
 
-import blogapp.com.entities.Post;
 import blogapp.com.payloads.PostDto;
 
 public interface PostService {
@@ -14,10 +13,11 @@ public interface PostService {
     void deletePost(Integer postId);
 
     // get all posts
-    java.util.List<Post> getAllPosts();
+    java.util.List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize);
 
     // get single post
-    Post getPostById(Integer postId);
+    PostDto getPostById(Integer postId);
+
 
     // get all posts by category
     java.util.List<PostDto> getPostsByCategory(Integer categoryId);
@@ -27,7 +27,7 @@ public interface PostService {
 
     // search posts
 
-    java.util.List<Post> searchPosts(String keyword);
+    java.util.List<PostDto> searchPosts(String keyword);
 
 
 

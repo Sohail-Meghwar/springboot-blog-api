@@ -1,7 +1,6 @@
 package blogapp.com.repoitories;
 
 import java.util.List;
-import java.util.Locale.Category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +11,7 @@ public interface PostRepo extends JpaRepository<blogapp.com.entities.Post, Integ
 
     List<Post> findByUser(User user);
     List<Post> findByCategory(blogapp.com.entities.Category cat);
+    List<Post> findByTitleContaining(String keyword);
+    
 
 } 
