@@ -42,24 +42,26 @@ private CategoryRepo categoryRepo;
 
     }
 
-    public PostRepo getPostRepo() {
-        return postRepo;
-    }
-
-    public void setPostRepo(PostRepo postRepo) {
-        this.postRepo = postRepo;
-    }
 
     @Override
-    public Post updatePost(PostDto postDto, Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePost'");
+    public PostDto updatePost(PostDto postDto, Integer postId) {
+      
+        Post post=this.postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post","id",postId));
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImageName(postDto.getImageName());
+        this.postRepo.save(post);
+        Post updatedPost=this.postRepo.save(post);
+        return this.modelMapper.map(updatedPost, PostDto.class);
+
+
     }
 
     @Override
     public void deletePost(Integer postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletePost'");
+     this.postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post","id",postId));
+        this.postRepo.deleteById(postId);
+
     }
 
     @Override
