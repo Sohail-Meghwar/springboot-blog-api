@@ -1,6 +1,7 @@
 package blogapp.com.services;
 
 import blogapp.com.payloads.PostDto;
+import blogapp.com.payloads.PostResponse;
 
 public interface PostService {
     // create
@@ -13,7 +14,7 @@ public interface PostService {
     void deletePost(Integer postId);
 
     // get all posts
-    java.util.List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     // get single post
     PostDto getPostById(Integer postId);

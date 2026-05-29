@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import blogapp.com.payloads.ApiResponse;
 import blogapp.com.payloads.PostDto;
+import blogapp.com.payloads.PostResponse;
 import blogapp.com.services.PostService;
 
 @RestController
@@ -73,13 +74,13 @@ public ResponseEntity<PostDto> updatePost(@PathVariable Integer postId, @Request
 // get all posts
 
 @GetMapping("/posts")
-public ResponseEntity<List<PostDto>> getAllPosts(
-        @RequestParam(value = "pageNumber", defaultValue = "10", required = false) Integer pageNumber,
-        @RequestParam(value = "pageSize", defaultValue = "1", required = false) Integer pageSize) {
+public ResponseEntity<List<PostResponse>> getAllPosts(
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
 
-    List<PostDto> allPosts = this.postService.getAllPosts(pageNumber, pageSize);
+    PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize);
 
-    return new ResponseEntity<List<PostDto>>(allPosts, HttpStatus.OK);
+    return new ResponseEntity<List<PostResponse>>(java.util.Collections.singletonList(postResponse), HttpStatus.OK);
 }
 
 

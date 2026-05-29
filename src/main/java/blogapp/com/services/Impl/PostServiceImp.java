@@ -12,6 +12,7 @@ import blogapp.com.entities.Post;
 import blogapp.com.entities.User;
 import blogapp.com.exception.ResourceNotFoundException;
 import blogapp.com.payloads.PostDto;
+import blogapp.com.payloads.PostResponse;
 import blogapp.com.repoitories.CategoryRepo;
 import blogapp.com.repoitories.PostRepo;
 import blogapp.com.repoitories.UserRepo;
@@ -66,12 +67,21 @@ private CategoryRepo categoryRepo;
     }
 
     @Override
-    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
     
         PageRequest pageable = PageRequest.of(pageNumber, pageSize);
-        List<Post> posts=this.postRepo.findAll(pageable).getContent();
+        org.springframework.data.domain.Page<Post> page=this.postRepo.findAll(pageable);
+        List<Post> posts=page.getContent();
         List<PostDto> postDtos= posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(java.util.stream.Collectors.toList());
-        return postDtos;
+        PostResponse postResponse=new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pageNumber);
+        postResponse.setPageSize(pageSize);
+        postResponse.setTotalElements(page.getTotalElements());
+        postResponse.setTotalPages(page.getTotalPages());
+        postResponse.setLastPage(page.isLast());
+        return postResponse;
+
 
     }
     
