@@ -19,18 +19,14 @@ public interface PostService {
     // get single post
     PostDto getPostById(Integer postId);
 
-
     // get all posts by category
-    java.util.List<PostDto> getPostsByCategory(Integer categoryId);
+    PostResponse getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize);
 
     // get all posts by user
-    java.util.List<PostDto> getPostsByUser(Integer userId);
+    PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize);
 
     // search posts
 
     java.util.List<PostDto> searchPosts(String keyword);
 
-
-
-    
 }
