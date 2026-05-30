@@ -69,9 +69,9 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize,String sortBy) {
 
-        PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+        PageRequest pageable = PageRequest.of(pageNumber,pageSize, org.springframework.data.domain.Sort.by(sortBy).descending());
         org.springframework.data.domain.Page<Post> page = this.postRepo.findAll(pageable);
         List<Post> posts = page.getContent();
         List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class))
