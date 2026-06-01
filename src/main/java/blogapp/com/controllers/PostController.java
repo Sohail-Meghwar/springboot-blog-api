@@ -1,5 +1,6 @@
 package blogapp.com.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import blogapp.com.payloads.ApiResponse;
 import blogapp.com.payloads.Appconstant;
 import blogapp.com.payloads.PostDto;
 import blogapp.com.payloads.PostResponse;
+import blogapp.com.services.FileService;
 import blogapp.com.services.PostService;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequestMapping("/api/")
 public class PostController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private FileService fileService;
+    @Value("${project.image}")
+    private String path;
 
     // create
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
@@ -100,6 +108,19 @@ public class PostController {
     }
 
 
-
+    // post image upload
+    @PostMapping("/post/image/upload/{postId}")
+    public ResponseEntity<PostDto> uploadImage(@PathVariable Integer postId, @RequestParam("image") MultipartFile image) throws Exception {
+        // try {
+        PostDto postDto=this.postService.getPostById(postId);
+            String fileName = this.fileService.uploadImage(path, image);
+            
+            postDto.setImageName(fileName);
+            PostDto updatepost=this.postService.updatePost(postDto, postId); 
+            return new ResponseEntity<PostDto>(updatepost, HttpStatus.OK);
+        // } catch (IOException e) {
+            // return new ResponseEntity<PostDto>("Error uploading image", HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
+    }
 
 }
