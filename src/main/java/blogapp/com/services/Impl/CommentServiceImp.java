@@ -3,6 +3,7 @@ package blogapp.com.services.Impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 
 import blogapp.com.entities.Comment;
 import blogapp.com.entities.Post;
@@ -10,7 +11,7 @@ import blogapp.com.exception.ResourceNotFoundException;
 import blogapp.com.payloads.CommentDto;
 import blogapp.com.repoitories.PostRepo;
 import blogapp.com.services.CommentService;
-
+@Service
 public class CommentServiceImp implements CommentService {
     @Autowired
     private CrudRepository<Comment, Integer> commentRepo;

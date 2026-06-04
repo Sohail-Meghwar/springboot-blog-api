@@ -25,8 +25,8 @@ public class Comment {
     private String content;
     @ManyToOne
     private Post post;
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    // @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    // private Set<Comment> comments = new HashSet<>();
 
     
 }
