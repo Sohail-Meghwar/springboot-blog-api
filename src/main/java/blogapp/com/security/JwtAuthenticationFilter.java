@@ -21,46 +21,58 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
 
+
+
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        
-// get token from header
-        String requestTokenHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwtToken = null;
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
 
-        if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-             jwtToken = requestTokenHeader.substring(7);
-             try {
-                
-             username = this.jwtTokenHelper.getUsernameFromToken(jwtToken);
-             }catch (Exception e) {
-                e.printStackTrace();
-             }
+    String path = request.getServletPath();
 
-        }else {
-        System.out.println("Invalid token, does not start with Bearer string");
-        }
-        // validate token
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if(this.jwtTokenHelper.validateToken(jwtToken, userDetails)) {
-                
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            
-                authentication.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else {
-                System.out.println("Invalid token");
-            }
-
-        }else {
-            System.out.println("Username is null or context is not null");
-        }
+    // SKIP JWT for login endpoint
+    if (path.equals("/api/auth/login")) {
         filterChain.doFilter(request, response);
-        
-    
-    
+        return;
     }
+
+    // get token from header
+    String requestTokenHeader = request.getHeader("Authorization");
+    String username = null;
+    String jwtToken = null;
+
+    if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        jwtToken = requestTokenHeader.substring(7);
+        try {
+            username = this.jwtTokenHelper.getUsernameFromToken(jwtToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+        if (this.jwtTokenHelper.validateToken(jwtToken, userDetails)) {
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+            authentication.setDetails(
+                    new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                            .buildDetails(request)
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+    }
+
+    filterChain.doFilter(request, response);
 }
+
+     }
