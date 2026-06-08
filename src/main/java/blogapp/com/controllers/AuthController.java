@@ -16,7 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import blogapp.com.payloads.JwtAuthRequest;
 import blogapp.com.payloads.JwtAuthResponse;
+import blogapp.com.payloads.UserDto;
 import blogapp.com.security.JwtTokenHelper;
+import blogapp.com.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -24,6 +26,9 @@ public class AuthController {
 
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -66,4 +71,13 @@ public class AuthController {
             );
         }
     }
-}
+
+    // register new user (optional)
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto) {
+        // Implement user registration logic here
+        UserDto createdUser = this.userService.registerNewUser(userDto);
+        // For example, save the user to the database and return the created user details
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+} 
