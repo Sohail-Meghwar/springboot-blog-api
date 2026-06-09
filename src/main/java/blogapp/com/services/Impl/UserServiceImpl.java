@@ -16,6 +16,7 @@ import blogapp.com.payloads.UserDto;
 import blogapp.com.repoitories.RoleRepo;
 import blogapp.com.repoitories.UserRepo;
 import blogapp.com.services.UserService;
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
