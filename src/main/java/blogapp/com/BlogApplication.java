@@ -3,7 +3,6 @@ package blogapp.com;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,11 +19,11 @@ import blogapp.com.repoitories.RoleRepo;
 public class BlogApplication implements CommandLineRunner {
 
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleRepo roleRepo;
+    private final RoleRepo roleRepo;
 
-    public BlogApplication(PasswordEncoder passwordEncoder) {
+    public BlogApplication(PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
         this.passwordEncoder = passwordEncoder;
+     this.roleRepo = roleRepo;
     }
 
     public static void main(String[] args) {
@@ -62,4 +61,4 @@ try {
  
 
     }
-}
+} 
